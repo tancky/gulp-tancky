@@ -8,7 +8,7 @@ console.log(`>>当前构建的环境为：${NODE_ENV}模式！==================
 
 let gulp = require('gulp'),
     $ = require('gulp-load-plugins')(), // 自动加载以gulp-为前缀的插件
-    px2rem = require('postcss-px2rem'), // postcss
+    pxtoviewport = require('postcss-px-to-viewport'), // postcss
     autoprefixer = require('autoprefixer'), // 自动添加浏览器前缀 gulp-autoprefixer已废弃
     browserSync = require('browser-sync').create(), //浏览器同步测试工具
     reload = browserSync.reload, //browserSync重载方法
@@ -32,44 +32,84 @@ var path = {
     less: 'src/less/',
     js: 'src/js/',
     img: 'src/img/',
-    fonts: 'src/fonts/'
+    fonts: 'src/fonts/',
+    static: 'src/static/'
   },
   dev: {
-    less: 'dev/less/',
+    css: 'dev/css/',
     js: 'dev/js/',
     img: 'dev/img/',
-    fonts: 'dev/fonts/'
+    fonts: 'dev/fonts/',
+    static: 'dev/static/'
   },
   build: {
-    less: 'build/less/',
+    css: 'build/css/',
     js: 'build/js/',
     img: 'build/img/',
     fonts: 'build/fonts/'
   }
 }
 
+// 清除dev目录
+gulp.task('clean:dev', () => {
+  return del([`${path.dir.dev}*`])
+})
 
-// less编译/自动处理浏览器前缀/px2rem
-gulp.task('less:dev', () => {
+//压缩html
+gulp.task('html:dev', () => {
+  return gulp.src(`${path.dir.src}index.html`)
+    .pipe($.changed(`${path.dir.dev}index.html`, {hasChanged: $.changed.compareSha1Digest}))
+    // .pipe($.htmlMinify())
+    .pipe($.useref())
+    .pipe(gulp.dest(path.dir.dev))
+    .pipe(reload({stream:true}))
+})
+
+// less编译/自动处理浏览器前缀/压缩css
+gulp.task('css:dev', () => {
   var processors = [
-    px2rem({
-      remUnit: 75
+    pxtoviewport({
+      viewportWidth: 750,
+      viewportHeight: 1334,
+      unitPrecision: 5,
+      viewportUnit: 'vw',
+      selectorBlackList: [],
+      minPixelValue: 1,
+      mediaQuery: false
     }),
     autoprefixer({
       browsers: ['last 5 versions']
     })
   ];
-  return gulp.src(`${path.src.less}**/*.less`)
+  return gulp.src(`${path.src.less}index.less`)
+    .pipe($.changed(`${path.dir.dev}css/*.css`, {hasChanged: $.changed.compareSha1Digest}))
     .pipe($.less())
     .pipe($.postcss(processors))
-    .pipe(gulp.dest(path.dev.less))
-    .pipe(browserSync.reload({stream:true}))
+    .pipe($.concat('app.min.css'))
+    .pipe($.cleanCss())
+    // .pipe($.rev())
+    .pipe(gulp.dest(path.dev.css))
+    // .pipe($.rev.manifest())
+    // .pipe(gulp.dest('./rev/css'))
+    .pipe(reload({stream:true}))
 })
 
-// 清除dev目录
-gulp.task('clean:dev', () => {
-  return del([`${path.dev}*`])
-})
+//压缩js
+gulp.task("js:dev", function(){
+  gulp.src(`${path.src.js}**/*.js`)
+    .pipe($.plumber())
+    .pipe($.changed(`${path.dir.dev}js/*.js`, {hasChanged: $.changed.compareSha1Digest}))
+    .pipe($.babel({
+      presets: ['env']
+    }))
+    .pipe($.concat('app.min.js'))
+    .pipe($.uglify())
+    // .pipe($.rev())
+    .pipe(gulp.dest(path.dev.js))
+    // .pipe($.rev.manifest())
+    // .pipe(gulp.dest('./rev/js'))
+    .pipe(reload({stream:true}))
+});
 
 // 压缩图片
 gulp.task('min_img:dev', () => {
@@ -108,29 +148,39 @@ gulp.task('babel:dev', () => {
 
 //sprite雪碧图合并...
 
-//压缩html
-gulp.task('min_html:dev', () => {
-  return gulp.src(`${path.dir.src}index.html`)
-    .pipe($.htmlMinify())
+// md5
+gulp.task('rev', () => {
+  return gulp.src(['./rev/**/*.json', `${path.dir.dev}index.html`])
+    .pipe($.revCollector())
     .pipe(gulp.dest(path.dir.dev))
 })
 
+// 自动将css/js文件注入html
+gulp.task('inject:dev', () => {
+  let target = gulp.src(`${path.dir.src}index.html`),
+      source = gulp.src([`${path.dev.css}**/*.css`, `${path.dev.js}**/*.js`], {read: false})
+  return target.pipe($.inject(source))
+    .pipe(gulp.dest(`${path.dir.dev}`))
+})
 //watch 实时监听
-gulp.task('serve:dev', () => {
+gulp.task('server:dev', () => {
   // 自动打开浏览器并实时监听文件改动
   browserSync.init({
     server: {
-      baseDir: "src/"
+      baseDir: "dev/"
     }
   });
-  gulp.watch(`${path.dir.dev}**/*.*`).on('change', reload)
+  gulp.watch(`${path.dir.src}**/*.less`, ['css:dev'])
+  gulp.watch(`${path.dir.src}js/*.js`, ['js:dev'])
+  gulp.watch(`${path.dir.src}*.html`, ['html:dev'])
 })
 
 // 开发环境
 gulp.task('dev', function (done) {
   run (
-    ['min_html:dev', 'less:dev'],
-    ['serve:dev'],
+    ['clean:dev'],
+    ['html:dev', 'css:dev', 'js:dev'],
+    ['server:dev'],
     done
   )
 })

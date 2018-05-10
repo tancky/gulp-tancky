@@ -2,10 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
     <title>520</title>
+    <!-- build_dev:css css/combine.css -->
+    <!--<link rel="stylesheet" href="static/css/index.css">-->
+    <!-- endbuild -->
+    <link rel="stylesheet" href="css/app.min.css">
 </head>
 <body>
-    <div class="ceshi">测试</div>
+    <div class="ceshi-wrap">
+        <div class="ceshi">
+            <ul class="list">
+                <li data-id="1">
+                    <p>测试啊s</p>
+                </li>
+                <li data-id="2">
+                    <p>测试啊测试啊ssss测试啊测试啊测试啊测试啊测试啊测a1试啊1</p>
+                </li>
+                <li data-id="3">
+                    <p>测试啊测试啊测试啊测试啊测试啊测试啊</p>
+                </li>
+                <li data-id="4">
+                    <p>测试啊s测试ss啊测s试啊</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- build:js js/vendor.min.js -->
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/fastclick/lib/fastclick.js"></script>
+    <!-- endbuild -->
+    <script src="js/app.min.js"></script>
+    <script>
+      $(function() {
+        FastClick.attach(document.body);
+      });
+    </script>
 </body>
 </html>
