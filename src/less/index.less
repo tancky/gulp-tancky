@@ -2,31 +2,259 @@
 /**
  * Created by Rayr Lee on 2018/5/8.
  */
-@import "lib/reset";  // 样式重置
-@import "lib/util";   // 工具类
+@import "lib/reset";
+// 样式重置
+@import "lib/util"; // 工具类
 html, body {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
 }
-.ceshi-wrap {
+
+.container {
   width: 100%;
   height: 100%;
-  padding: 30px 30px 80px 30px;
-  background-color: blue;
+  .swiper-container {
+    width: 100%;
+    height: 100%;
+    .section {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
+    .options-list {
+      margin-top: 40px;
+      img {
+        display: inline-block;
+        width: 416px;
+        height: 102px;
+        margin-top: 12px;
+      }
+    }
+    .section1 {
+      background-image: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30171.png');
+      text-align: center;
+      .logo-wrap {
+        padding-top: 176px;
+        .logo {
+          width: 80px;
+          height: 84px;
+        }
+        h2 {
+          font-size: 60px;
+          margin-top: 40px;
+          color: #fff;
+          letter-spacing: 1px;
+        }
+      }
+      .text-wrap {
+        margin-top: 62px;
+        p {
+          font-size: 30px;
+          line-height: 50px;
+          color: #fff;
+        }
+      }
+      .swiper-button-next1 {
+        top: 82%;
+        left: 50%;
+        width: 362px;
+        height: 156px;
+        margin-left: -181px;
+        background: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30176.png') no-repeat;
+        background-size: 100% 100%;
+      }
+    }
+    .section2 {
+      background-image: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30177.png');
+      h2 {
+        font-size: 58px;
+        padding-top: 110px;
+        color: #fff;
+      }
+      .nick {
+        margin-top: 52px;
+        .female, .male {
+          display: flex;
+          align-items: flex-end;
+          color: #fff;
+        }
+        .nick-name {
+          font-size: 34px;
+        }
+        .tips {
+          font-size: 24px;
+        }
+        .male {
+          margin-top: 50px;
+        }
+        input {
+          width: 200px;
+          height: 50px;
+          border-bottom: 1px solid #fff;
+          background-color: transparent;
+          outline: none;
+          margin: 0 20px;
+          text-align: center;
+          font-size: 32px;
+          color: #fff;
+        }
+      }
+      .swiper-button-next2 {
+        top: 92%;
+        left: 50%;
+        width: 328px;
+        height: 82px;
+        margin-left: -164px;
+        background: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30184.png') center center no-repeat;
+        background-size: cover;
+      }
+    }
+    .section3 {
+      background-image: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30185.png');
+      h2 {
+        font-size: 58px;
+        padding-top: 110px;
+        color: #fff;
+      }
+      .options-list {
+        img {
+          width: 700px;
+          height: 102px;
+          margin-top: 12px;
+        }
+      }
+      .swiper-button-next3 {
+        top: 92%;
+        left: 50%;
+        width: 328px;
+        height: 82px;
+        margin-left: -164px;
+        background: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30184.png') center center no-repeat;
+        background-size: cover;
+      }
+      .custom {
+        width: 700px;
+        height: 102px;
+        margin-top: 15px;
+        background: url("//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30187.png") no-repeat;
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        p {
+          color: #E44F61;
+        }
+        input {
+          flex: 1;
+          border-bottom: 1px solid #E44F61;
+          background-color: transparent;
+          outline: none;
+          margin: 0 20px;
+          text-align: center;
+          font-size: 32px;
+          color: #E44F61;
+        }
+      }
+      .custom-tips {
+        width: 700px;
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+        font-size: 24px;
+        color: #e44f61;
+      }
+    }
+    .section5 {
+      background: url("//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30188.png");
+      background-size: cover;
+      .loading {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        img {
+          display: inline-block;
+          width: 240px;
+          height: 220px;
+          animation: heart 1s infinite;
+        }
+        .load-more {
+          display: flex;
+          align-items: flex-end;
+          p {
+            font-size: 34px;
+            margin-top: 50px;
+          }
+          .bouncing-loader {
+            display: flex;
+            justify-content: center;
+          }
+          .bouncing-loader > div {
+            width: 20px;
+            height: 20px;
+            margin: 0 .3rem;
+            background: #fff;
+            border-radius: 50%;
+            animation: bouncing-loader 0.5s infinite alternate;
+          }
+          .bouncing-loader > div:nth-child(2) {
+            animation-delay: 0.2s;
+          }
+          .bouncing-loader > div:nth-child(3) {
+            animation-delay: 0.4s;
+          }
+        }
+      }
+    }
+    .section6 {
+      background: url("//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30188.png");
+      background-size: cover;
+      .button-group {
+        width: 602px;
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        img {
+          width: 100%;
+        }
+      }
+      .tips-1 {
+        color: #fff;
+        font-size: 24px;
+        margin-top: 16px;
+      }
+    }
+  }
 }
-.ceshi {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-image: url('//p1.meituan.net/scarlett/87c82a1d731187a27a1cb07516d2c443131701.png');
-  background-repeat: no-repeat;
-  background-size: cover;
+
+@keyframes heart {
+  0% {
+    transform: scale(.8);
+  }
+  25% {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(.8);
+  }
 }
-.list {
-  display: flex;
-  flex-direction: column;
-}
-.list li {
-  margin-top: 20px;
+@keyframes bouncing-loader {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0.26;
+    transform: translateY(-10px);
+  }
 }

@@ -112,13 +112,10 @@ gulp.task("js:dev", function(){
 });
 
 // 压缩图片
-gulp.task('min_img:dev', () => {
-  return gulp.src(`${path.src.img}**/.*`)
-    .pipe($.imagemin())
+gulp.task('img:dev', () => {
+  return gulp.src(`${path.src.img}*.*`)
+    // .pipe($.imagemin())
     .pipe(gulp.dest(path.dev.img))
-    .pipe($.notify({
-      message: '图片压缩成功'
-    }))
 })
 
 //eslint代码检查
@@ -179,7 +176,7 @@ gulp.task('server:dev', () => {
 gulp.task('dev', function (done) {
   run (
     ['clean:dev'],
-    ['html:dev', 'css:dev', 'js:dev'],
+    ['html:dev', 'css:dev', 'js:dev', 'img:dev'],
     ['server:dev'],
     done
   )
