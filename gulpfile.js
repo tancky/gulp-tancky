@@ -9,10 +9,12 @@ console.log(`>>当前构建的环境为：${NODE_ENV}模式！==================
 let gulp = require('gulp'),
     $ = require('gulp-load-plugins')(), // 自动加载以gulp-为前缀的插件
     pxtoviewport = require('postcss-px-to-viewport'), // postcss
+    px2rem = require('postcss-px2rem'),
     autoprefixer = require('autoprefixer'), // 自动添加浏览器前缀 gulp-autoprefixer已废弃
     browserSync = require('browser-sync').create(), //浏览器同步测试工具
     reload = browserSync.reload, //browserSync重载方法
     del = require('del'),  //del代替gulp-clean
+    precompile = require('gulp-handlebars-precompile'),
     run = require('run-sequence'); //同步/异步执行gulp任务
 
 // 读取gulp目录下所有的任务遍历后require引入,然后执行gulp任务
@@ -68,17 +70,18 @@ gulp.task('html:dev', () => {
 // less编译/自动处理浏览器前缀/压缩css
 gulp.task('css:dev', () => {
   var processors = [
-    pxtoviewport({
-      viewportWidth: 750,
-      viewportHeight: 1334,
-      unitPrecision: 5,
-      viewportUnit: 'vw',
-      selectorBlackList: [],
-      minPixelValue: 1,
-      mediaQuery: false
-    }),
+    // pxtoviewport({
+    //   viewportWidth: 750,
+    //   viewportHeight: 1334,
+    //   unitPrecision: 5,
+    //   viewportUnit: 'vw',
+    //   selectorBlackList: [],
+    //   minPixelValue: 1,
+    //   mediaQuery: false
+    // }),
+    px2rem({remUnit: 75}),
     autoprefixer({
-      browsers: ['last 5 versions']
+      browsers: ['iOS >= 7', 'Android >= 4.1']
     })
   ];
   return gulp.src(`${path.src.less}index.less`)
@@ -131,20 +134,30 @@ gulp.task('eslint:dev', () => {
     }))
 })
 
-// babel转码
-gulp.task('babel:dev', () => {
-  return gulp.src(`${path.src.js}**/*.js`)
-    .pipe($.babel({
-      presets: ['env']
+//handlebars预编译
+gulp.task('tpl:dev', function(){
+  return gulp.src('src/*.html')
+    .pipe(precompile({
+      reg: /<!\-\-hbs\s+"([^"]+)"\-\->/g,
+      baseSrc: "src/tpl/",
+      dest: "dev/tpl/",
+      scriptSrc: 'tpl/',
+      inline: true,
+      namespace: 'kevin'
     }))
-    .pipe(gulp.dest(path.dev.js))
-    .pipe($.notify({
-      message: 'es6转码成功'
+    .pipe(gulp.dest('dev/'))
+});
+
+//自动上传服务器
+gulp.task('ftp:dev', function () {
+  return gulp.src('dev/**/*')
+    .pipe($.ftp({
+      host: '123.57.224.228',
+      port: 21,
+      user: 'tzl',
+      pass: 'tzl@ilc#pgsq'
     }))
-})
-
-//sprite雪碧图合并...
-
+});
 // md5
 gulp.task('rev', () => {
   return gulp.src(['./rev/**/*.json', `${path.dir.dev}index.html`])
@@ -178,6 +191,16 @@ gulp.task('dev', function (done) {
     ['clean:dev'],
     ['html:dev', 'css:dev', 'js:dev', 'img:dev'],
     ['server:dev'],
+    done
+  )
+})
+
+// 生产环境
+gulp.task('build', function (done) {
+  run (
+    ['clean:dev'],
+    ['html:dev', 'css:dev', 'js:dev', 'img:dev'],
+    ['ftp:dev'],
     done
   )
 })

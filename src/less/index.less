@@ -6,11 +6,9 @@
 // 样式重置
 @import "lib/util"; // 工具类
 html, body {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
-
 .container {
   width: 100%;
   height: 100%;
@@ -26,22 +24,35 @@ html, body {
       align-items: center;
       text-align: center;
       background-repeat: no-repeat;
-      background-size: 100% 100%;
+      background-size: cover;
     }
     .options-list {
       margin-top: 40px;
-      img {
-        display: inline-block;
-        width: 416px;
-        height: 102px;
-        margin-top: 12px;
+      li {
+        position: relative;
+        img {
+          display: inline-block;
+          width: 416px;
+          margin-top: 12px;
+        }
+        i {
+          position: absolute;
+          display: none;
+          top: 50%;
+          right: 0;
+          width: 82px;
+          height: 68px;
+          margin-top: -41px;
+          background: url("//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30203.png") no-repeat;
+          background-size: cover;
+        }
       }
     }
     .section1 {
-      background-image: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30171.png');
+      background-image: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30225.png');
       text-align: center;
       .logo-wrap {
-        padding-top: 176px;
+        margin-top: 150px;
         .logo {
           width: 80px;
           height: 84px;
@@ -62,57 +73,107 @@ html, body {
         }
       }
       .swiper-button-next1 {
-        top: 82%;
-        left: 50%;
         width: 362px;
         height: 156px;
-        margin-left: -181px;
-        background: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30176.png') no-repeat;
-        background-size: 100% 100%;
+        margin-top: 30px;
+        background: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30235.png') no-repeat;
+        background-size: cover;
       }
     }
     .section2 {
-      background-image: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30177.png');
+      position: relative;
+      background-image: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30232.png');
       h2 {
         font-size: 58px;
-        padding-top: 110px;
+        margin-top: 90px;
         color: #fff;
       }
-      .nick {
-        margin-top: 52px;
-        .female, .male {
+      .zdy {
+        li {
           display: flex;
-          align-items: flex-end;
-          color: #fff;
-        }
-        .nick-name {
-          font-size: 34px;
-        }
-        .tips {
-          font-size: 24px;
-        }
-        .male {
-          margin-top: 50px;
-        }
-        input {
-          width: 200px;
-          height: 50px;
-          border-bottom: 1px solid #fff;
-          background-color: transparent;
-          outline: none;
-          margin: 0 20px;
-          text-align: center;
+          align-items: center;
+          width: 416px;
+          height: 102px;
+          background-image: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30236.png');
+          background-size: 100% 100%;
+          margin-top: 12px;
           font-size: 32px;
           color: #fff;
+          p {
+            margin-left: 40px;
+          }
+          .slot {
+            flex: 1;
+            text-align: left;
+            font-size: 30px;
+            margin: 0 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
         }
       }
+      .obj-mask {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,.3);
+        .obj-wrap {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: 560px;
+          height: 468px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          background-color: #fff;
+          color: #000;
+          border-radius: 14px;
+        }
+        .obj-input {
+          width: 90%;
+          height: 140px;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          .female, .male {
+            display: flex;
+            align-items: flex-end;
+            font-size: 30px;
+            line-height: 1.5em;
+            p {
+              margin-right: 30px;
+            }
+            input {
+              width: 60%;
+              border-bottom: 2px solid #ccc;
+            }
+          }
+        }
+        .select {
+          display: flex;
+          width: 90%;
+          margin: 60px auto 0;
+          justify-content: space-around;
+          img {
+            width: 206px;
+            height: 82px;
+          }
+        }
+      }
+      .mask1 {
+        display: none;
+      }
       .swiper-button-next2 {
-        top: 92%;
-        left: 50%;
         width: 328px;
         height: 82px;
-        margin-left: -164px;
-        background: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30184.png') center center no-repeat;
+        margin-top: 40px;
+        background: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30233.png') center center no-repeat;
         background-size: cover;
       }
     }
@@ -120,24 +181,67 @@ html, body {
       background-image: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30185.png');
       h2 {
         font-size: 58px;
-        padding-top: 110px;
+        margin-top: 110px;
         color: #fff;
       }
       .options-list {
-        img {
-          width: 700px;
+        li {
+          position: relative;
+          width: 640px;
           height: 102px;
+          line-height: 102px;
           margin-top: 12px;
+          background: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30222.png') no-repeat;
+          background-size: cover;
+          p {
+            width: 76%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 30px;
+            margin-left: 40px;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
         }
       }
       .swiper-button-next3 {
-        top: 92%;
-        left: 50%;
         width: 328px;
         height: 82px;
-        margin-left: -164px;
+        margin-top: 70px;
         background: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30184.png') center center no-repeat;
         background-size: cover;
+      }
+    }
+    .section4 {
+      position: relative;
+      background-image: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30185.png');
+      h2 {
+        font-size: 58px;
+        margin-top: 110px;
+        color: #fff;
+      }
+      .options-list {
+        li {
+          position: relative;
+          width: 706px;
+          height: 102px;
+          line-height: 102px;
+          margin-top: 12px;
+          background: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30202.png') no-repeat;
+          background-size: cover;
+          p {
+            width: 80%;
+            font-size: 30px;
+            text-align: left;
+            margin-left: 40px;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
       }
       .custom {
         width: 700px;
@@ -149,31 +253,85 @@ html, body {
         align-items: center;
         padding: 0 20px;
         p {
-          color: #E44F61;
-        }
-        input {
-          flex: 1;
-          border-bottom: 1px solid #E44F61;
-          background-color: transparent;
-          outline: none;
-          margin: 0 20px;
-          text-align: center;
+          margin-left: 20px;
           font-size: 32px;
           color: #E44F61;
+          line-height: 1.5em;
+        }
+        .love_words {
+          flex: 1;
+          margin-left: 20px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          text-align: left;
         }
       }
-      .custom-tips {
-        width: 700px;
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 20px;
-        font-size: 24px;
-        color: #e44f61;
+      .swiper-button-next4 {
+        width: 328px;
+        height: 82px;
+        margin-top: 30px;
+        background: url('//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30184.png') center center no-repeat;
+        background-size: cover;
+      }
+      .obj-mask {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,.3);
+        .obj-wrap {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: 560px;
+          height: 468px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          background-color: #fff;
+          color: #000;
+          border-radius: 14px;
+        }
+        .obj-input {
+          width: 90%;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          .female, .male {
+            display: flex;
+            align-items: flex-end;
+            font-size: 30px;
+            padding-top: 20px;
+            p {
+              margin-right: 30px;
+            }
+            input {
+              width: 60%;
+              border-bottom: 2px solid #ccc;
+            }
+          }
+        }
+        .select {
+          display: flex;
+          width: 90%;
+          margin: 60px auto 0;
+          justify-content: space-around;
+          img {
+            width: 206px;
+            height: 82px;
+          }
+        }
+      }
+      .mask2 {
+        display: none;
       }
     }
     .section5 {
       background: url("//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30188.png");
-      background-size: cover;
       .loading {
         width: 100%;
         height: 100%;
@@ -193,35 +351,40 @@ html, body {
           align-items: flex-end;
           p {
             font-size: 34px;
-            margin-top: 50px;
+            margin-top: 30px;
           }
-          .bouncing-loader {
-            display: flex;
-            justify-content: center;
-          }
-          .bouncing-loader > div {
-            width: 20px;
-            height: 20px;
-            margin: 0 .3rem;
-            background: #fff;
-            border-radius: 50%;
-            animation: bouncing-loader 0.5s infinite alternate;
-          }
-          .bouncing-loader > div:nth-child(2) {
-            animation-delay: 0.2s;
-          }
-          .bouncing-loader > div:nth-child(3) {
-            animation-delay: 0.4s;
-          }
+        }
+        .bouncing-loader {
+          display: flex;
+          justify-content: center;
+          margin-top: 40px;
+        }
+        .bouncing-loader > div {
+          width: 20px;
+          height: 20px;
+          margin: 0 .2rem;
+          background: #fff;
+          border-radius: 50%;
+          animation: bouncing-loader 0.5s infinite alternate;
+        }
+        .bouncing-loader > div:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        .bouncing-loader > div:nth-child(3) {
+          animation-delay: 0.4s;
         }
       }
     }
     .section6 {
+      display: none;
       background: url("//imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30188.png");
-      background-size: cover;
+      .result {
+        width: 602px;
+        margin-top: 60px;
+      }
       .button-group {
         width: 602px;
-        margin-top: 20px;
+        margin: 20px auto 0;
         display: flex;
         justify-content: space-between;
         img {

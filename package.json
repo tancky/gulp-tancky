@@ -27,6 +27,8 @@
     "gulp-connect": "^5.5.0",
     "gulp-eslint": "^4.0.2",
     "gulp-filter": "^5.1.0",
+    "gulp-ftp": "^1.1.0",
+    "gulp-handlebars-precompile": "^1.0.3",
     "gulp-html-minify": "^0.0.14",
     "gulp-imagemin": "^4.1.0",
     "gulp-inject": "^4.3.2",
@@ -50,8 +52,11 @@
     "animate.css": "^3.6.1",
     "fastclick": "^1.0.6",
     "flexible.js": "^2.0.19",
+    "handlebars": "^4.0.11",
     "jquery": "^3.3.1",
     "lodash": "^4.17.10",
-    "swiper": "^4.2.6"
+    "swiper": "^4.2.6",
+    "weui": "^1.1.2",
+    "weui.js": "^1.1.3"
   }
 }
