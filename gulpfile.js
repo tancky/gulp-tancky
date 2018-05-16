@@ -90,10 +90,10 @@ gulp.task('css:dev', () => {
     .pipe($.postcss(processors))
     .pipe($.concat('app.min.css'))
     .pipe($.cleanCss())
-    // .pipe($.rev())
+    // .pipe($.rev())   // 生产模式开启
     .pipe(gulp.dest(path.dev.css))
-    // .pipe($.rev.manifest())
-    // .pipe(gulp.dest('./rev/css'))
+    // .pipe($.rev.manifest())     // 生产模式开启
+    // .pipe(gulp.dest('./rev/css')) // 生产模式开启
     .pipe(reload({stream:true}))
 })
 
@@ -107,19 +107,12 @@ gulp.task("js:dev", function(){
     }))
     .pipe($.concat('app.min.js'))
     .pipe($.uglify())
-    // .pipe($.rev())
+    // .pipe($.rev())    // 生产模式开启
     .pipe(gulp.dest(path.dev.js))
-    // .pipe($.rev.manifest())
-    // .pipe(gulp.dest('./rev/js'))
+    // .pipe($.rev.manifest())  // 生产模式开启
+    // .pipe(gulp.dest('./rev/js')) // 生产模式开启
     .pipe(reload({stream:true}))
 });
-
-// 压缩图片
-gulp.task('img:dev', () => {
-  return gulp.src(`${path.src.img}*.*`)
-    // .pipe($.imagemin())
-    .pipe(gulp.dest(path.dev.img))
-})
 
 //eslint代码检查
 gulp.task('eslint:dev', () => {
@@ -158,6 +151,7 @@ gulp.task('ftp:dev', function () {
       pass: 'tzl@ilc#pgsq'
     }))
 });
+
 // md5
 gulp.task('rev', () => {
   return gulp.src(['./rev/**/*.json', `${path.dir.dev}index.html`])
@@ -165,13 +159,6 @@ gulp.task('rev', () => {
     .pipe(gulp.dest(path.dir.dev))
 })
 
-// 自动将css/js文件注入html
-gulp.task('inject:dev', () => {
-  let target = gulp.src(`${path.dir.src}index.html`),
-      source = gulp.src([`${path.dev.css}**/*.css`, `${path.dev.js}**/*.js`], {read: false})
-  return target.pipe($.inject(source))
-    .pipe(gulp.dest(`${path.dir.dev}`))
-})
 //watch 实时监听
 gulp.task('server:dev', () => {
   // 自动打开浏览器并实时监听文件改动
@@ -189,7 +176,8 @@ gulp.task('server:dev', () => {
 gulp.task('dev', function (done) {
   run (
     ['clean:dev'],
-    ['html:dev', 'css:dev', 'js:dev', 'img:dev'],
+    ['html:dev', 'css:dev', 'js:dev'],
+    // ['rev'],    //生产模式添加MD5
     ['server:dev'],
     done
   )
@@ -199,7 +187,8 @@ gulp.task('dev', function (done) {
 gulp.task('build', function (done) {
   run (
     ['clean:dev'],
-    ['html:dev', 'css:dev', 'js:dev', 'img:dev'],
+    ['html:dev', 'css:dev', 'js:dev'],
+    // ['rev'],    //生产模式添加MD5
     ['ftp:dev'],
     done
   )
