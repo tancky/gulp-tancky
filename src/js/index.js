@@ -3,13 +3,14 @@
  */
 
 $(function () {
+  // 获取app_id 调用sdk
   $.ajax({
     url: 'http://stat.iliangcang.com/520/prog/getshareparam.php',
     //生成成功
     success: function (data) {
       let res = JSON.parse(data);
       wx.config({
-        debug: false,
+        debug: true,
         appId: res.appId,
         timestamp: res.timestamp,
         nonceStr: res.nonceStr,
@@ -25,31 +26,34 @@ $(function () {
         wx.onMenuShareTimeline({
           title: '520，你该表白了', // 分享标题
           desc: '520，你准备好给谁表白了吗？', // 分享描述
-          link: 'http://www.iliangcang.com/i/topicapp/201707100852/?mz_ca=2051856&mz_sp=77Aeq&mz_sb=1',
-          imgUrl: 'http://imgs-qn.iliangcang.com//ware/ueditor/image/20170712/1499789295787554.png',
+          link: 'http://www.iliangcang.com/520/index.html',
+          imgUrl: 'http://imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30250.jpeg',
           trigger: function (res) {
             // alert("分享到朋友圈按钮点击");
           },
           success: function (res) {
+
           },
           cancel: function (res) {
-            // alert('已取消');
+
           },
           fail: function (res) {
             alert(JSON.stringify(res));
           }
         });
         wx.onMenuShareAppMessage({
-          title: '良仓杂志', // 分享标题
-          desc: '他用一张196㎡的纸还原出世界上最后一头白犀牛', // 分享描述
-          link: 'http://www.iliangcang.com/i/topicapp/201707100852/?mz_ca=2051856&mz_sp=77Aeq&mz_sb=1', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          imgUrl: 'http://imgs-qn.iliangcang.com//ware/ueditor/image/20170712/1499789295787554.png', // 分享图标
+          title: '520，你该表白了', // 分享标题
+          desc: '520，你准备好给谁表白了吗？', // 分享描述
+          link: 'http://www.iliangcang.com/520/index.html', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: 'http://imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30250.jpeg', // 分享图标
           type: '', // 分享类型,music、video或link，不填默认为link
           dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
           success: function () {
+            alert('ok')
             // 用户确认分享后执行的回调函数
           },
           cancel: function () {
+            alert('已取消');
             // 用户取消分享后执行的回调函数
           }
         });
@@ -287,11 +291,10 @@ $(function () {
     data.obj_name = $('#obj_name').val();
     data.your_name = $('#your_name').val();
     data.words = $('#words').val();
-    console.log($('#words').val());
     $('.slot-1').text(data.obj_name);
     $('.slot-2').text(data.your_name);
-    $('.section4 .options-list li').find('i').hide();
     $('.love_words').text(data.words);
+    $('.section4 .options-list li').find('i').hide();
     $('.obj-mask').hide();
   });
   //取消
@@ -332,9 +335,14 @@ $(function () {
   });
   // 点击切换选中按钮状态
   $('.section4 .options-list').on('click', 'li', function (e) {
-    data.words = e.currentTarget.innerText;
     $('.section4 .options-list li').find('i').hide();
-    $(this).find('i').show();
+    if ($('.love_words').text() == '' || $('.love_words').text() == '25个字以内') {
+      data.words = e.currentTarget.innerText;
+      $(this).find('i').show();
+    } else {
+      weui.alert('您已输入表白语请清空后再试')
+      data.words = $('.love_words').text()
+    }
   });
   // 获取表白内容 点击进入下一页
   $('.swiper-button-next4').on('click', function () {
@@ -354,7 +362,7 @@ $(function () {
           let res = JSON.parse(data);
           let img_url = res.pic_url;
           $('.section6 .result').attr('src', img_url);
-          $('.section5').fadeOut(1000).end().find($('.sec6-wrap')).show();
+          $('.section5').delay(2000).fadeOut().end().find($('.sec6-wrap')).show();
         }
       });
     }

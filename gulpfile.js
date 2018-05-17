@@ -105,8 +105,8 @@ gulp.task("js:dev", function(){
     .pipe($.babel({
       presets: ['env']
     }))
-    .pipe($.concat('app.min.js'))
-    .pipe($.uglify())
+    .pipe($.concat('app.js'))
+    // .pipe($.uglify())
     // .pipe($.rev())    // 生产模式开启
     .pipe(gulp.dest(path.dev.js))
     // .pipe($.rev.manifest())  // 生产模式开启
