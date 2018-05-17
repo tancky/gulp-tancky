@@ -70,16 +70,16 @@ gulp.task('html:dev', () => {
 // less编译/自动处理浏览器前缀/压缩css
 gulp.task('css:dev', () => {
   var processors = [
-    // pxtoviewport({
-    //   viewportWidth: 750,
-    //   viewportHeight: 1334,
-    //   unitPrecision: 5,
-    //   viewportUnit: 'vw',
-    //   selectorBlackList: [],
-    //   minPixelValue: 1,
-    //   mediaQuery: false
-    // }),
-    px2rem({remUnit: 75}),
+    pxtoviewport({
+      viewportWidth: 750,
+      viewportHeight: 1334,
+      unitPrecision: 5,
+      viewportUnit: 'vw',
+      selectorBlackList: [],
+      minPixelValue: 1,
+      mediaQuery: false
+    }),
+    // px2rem({remUnit: 75}),
     autoprefixer({
       browsers: ['iOS >= 7', 'Android >= 4.1']
     })
@@ -105,8 +105,8 @@ gulp.task("js:dev", function(){
     .pipe($.babel({
       presets: ['env']
     }))
-    .pipe($.concat('app.js'))
-    // .pipe($.uglify())
+    .pipe($.concat('app.min.js'))
+    .pipe($.uglify())
     // .pipe($.rev())    // 生产模式开启
     .pipe(gulp.dest(path.dev.js))
     // .pipe($.rev.manifest())  // 生产模式开启

@@ -3,63 +3,6 @@
  */
 
 $(function () {
-  // 获取app_id 调用sdk
-  $.ajax({
-    url: 'http://stat.iliangcang.com/520/prog/getshareparam.php',
-    //生成成功
-    success: function (data) {
-      let res = JSON.parse(data);
-      wx.config({
-        debug: true,
-        appId: res.appId,
-        timestamp: res.timestamp,
-        nonceStr: res.nonceStr,
-        signature: res.signature,
-        jsApiList: [
-          'checkJsApi',
-          'onMenuShareTimeline',
-          'onMenuShareAppMessage'
-        ]
-      });
-      wx.ready(function () {
-        // 2.2 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
-        wx.onMenuShareTimeline({
-          title: '520，你该表白了', // 分享标题
-          desc: '520，你准备好给谁表白了吗？', // 分享描述
-          link: 'http://www.iliangcang.com/520/index.html',
-          imgUrl: 'http://imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30250.jpeg',
-          trigger: function (res) {
-            // alert("分享到朋友圈按钮点击");
-          },
-          success: function (res) {
-
-          },
-          cancel: function (res) {
-
-          },
-          fail: function (res) {
-            alert(JSON.stringify(res));
-          }
-        });
-        wx.onMenuShareAppMessage({
-          title: '520，你该表白了', // 分享标题
-          desc: '520，你准备好给谁表白了吗？', // 分享描述
-          link: 'http://www.iliangcang.com/520/index.html', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          imgUrl: 'http://imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30250.jpeg', // 分享图标
-          type: '', // 分享类型,music、video或link，不填默认为link
-          dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-          success: function () {
-            alert('ok')
-            // 用户确认分享后执行的回调函数
-          },
-          cancel: function () {
-            alert('已取消');
-            // 用户取消分享后执行的回调函数
-          }
-        });
-      });
-    }
-  });
   // 解决移动端300ms点击延迟
   FastClick.attach(document.body);
   // 初始化swiper
@@ -77,6 +20,120 @@ $(function () {
       }
     }
   });
+  // 函数命名空间
+  let func = {
+    switch_next() {
+      // 首页点击进入下一页
+      $('.swiper-button-next1').on('click', function () {
+        mySwiper.slideNext();
+      });
+      // 获取对象昵称 点击进入下一页
+      $('.swiper-button-next2').on('click', function () {
+        data.obj_name = $('#obj_name').val();  // 获取对象昵称(选填)
+        data.your_name = $('#your_name').val(); // 获取你的昵称(选填)
+        if (data.obj_id !== '') {
+          mySwiper.slideNext();
+        }
+        else {
+          weui.alert('请选择表白对象');
+          return;
+        }
+      });
+      // 获取表白地点 点击进入下一页
+      $('.swiper-button-next3').on('click', function () {
+        if (data.place !== '') {
+          mySwiper.slideNext();
+        }
+        else {
+          weui.alert('请选择表白地点');
+          return;
+        }
+      });
+      // 获取表白内容 点击进入下一页
+      $('.swiper-button-next4').on('click', function () {
+        if (data.words !== '') {
+          mySwiper.slideNext();
+          // 内容生成中
+          $.ajax({
+            url: 'http://www.iliangcang.com/520/prog/getsharepic.php',
+            data: {
+              place: data.place,
+              words: data.words,
+              obj_name: data.obj_name, // 对象昵称(选填)
+              your_name: data.your_name// 你的昵称(选填)
+            },
+            //生成成功
+            success: function (data) {
+              let res = JSON.parse(data);
+              let img_url = res.pic_url;
+              $('.section6 .result').attr('src', img_url);
+              $('.section5').delay(2000).fadeOut().end().find($('.sec6-wrap')).show();
+            }
+          });
+        }
+        else {
+          weui.alert('请选择表白语或输入要表白的话');
+          return;
+        }
+      });
+    },
+    change_status() {
+      // 点击切换选中按钮状态
+      $('.section2 .options-list li').on('click', function () {
+        data.obj_id = $(this).data('obj_id'); // 获取表白id
+        data.list = data.arr[data.obj_id].list;  // 获取当前点击对象的表白语数组
+        $('.section2 .options-list li').find('i').hide();
+        $(this).find('i').show();
+        //根据表白人物渲染不同的表白语
+        let tpl = Handlebars.compile($('#list-tpl').html());  //解析模板
+        $('.section4 .options-list').html(tpl(data.list));
+      });
+      // 点击切换选中按钮状态
+      $('.section3 .options-list li').on('click', function () {
+        data.place = $(this).data('place');  //获取表白地点
+        $('.section3 .options-list li').find('i').hide();
+        $(this).find('i').show();
+      });
+      // 点击切换选中按钮状态
+      $('.section4 .options-list').on('click', 'li', function (e) {
+        $('.section4 .options-list li').find('i').hide();
+        if ($('.love_words').text() == '' || $('.love_words').text() == '25个字以内') {
+          data.words = e.currentTarget.innerText;
+          $(this).find('i').show();
+        } else {
+          weui.alert('您已输入表白语请清空后再试')
+          data.words = $('.love_words').text()
+        }
+      });
+    },
+    change_mask() {
+      //点击显示表白对象遮罩层
+      $('.zdy li').on('click', function () {
+        console.log($(this).data('obj_id'));
+        $('.mask1').fadeIn();
+      });
+      //点击显示表白语遮罩层
+      $('.custom').on('click', function () {
+        console.log($(this).data('obj_id'));
+        $('.mask2').fadeIn();
+      });
+      //点击确认按钮获取输入框的值
+      $('.confirm').on('click', function () {
+        data.obj_name = $('#obj_name').val();
+        data.your_name = $('#your_name').val();
+        data.words = $('#words').val();
+        $('.slot-1').text(data.obj_name);
+        $('.slot-2').text(data.your_name);
+        $('.love_words').text(data.words);
+        $('.section4 .options-list li').find('i').hide();
+        $('.obj-mask').hide();
+      });
+      //取消
+      $('.cancel').on('click', function () {
+        $('.obj-mask').hide();
+      });
+    }
+  };
   // 初始化变量数据
   let data = {
     obj_id: '', //选择对象id
@@ -261,114 +318,67 @@ $(function () {
       }
     ],    //表白语数组
     list: [],      // 选中的表白语数组
-    talk: ''       // 想说的话
-  };
-
-  let sec2_opt = $('.section2 .options-list li');
-  let sec3_opt = $('.section3 .options-list li');
-  // 点击切换选中按钮状态
-  sec2_opt.on('click', function () {
-    data.obj_id = $(this).data('obj_id'); // 获取表白id
-    data.list = data.arr[data.obj_id].list;  // 获取当前点击对象的表白语数组
-    sec2_opt.find('i').hide();
-    $(this).find('i').show();
-    //根据表白人物渲染不同的表白语
-    let tpl = Handlebars.compile($('#list-tpl').html());  //解析模板
-    $('.section4 .options-list').html(tpl(data.list));
-  });
-  //点击显示表白对象遮罩层
-  $('.zdy li').on('click', function () {
-    console.log($(this).data('obj_id'));
-    $('.mask1').fadeIn();
-  });
-  //点击显示表白语遮罩层
-  $('.custom').on('click', function () {
-    console.log($(this).data('obj_id'));
-    $('.mask2').fadeIn();
-  });
-  //点击确认按钮获取输入框的值
-  $('.confirm').on('click', function () {
-    data.obj_name = $('#obj_name').val();
-    data.your_name = $('#your_name').val();
-    data.words = $('#words').val();
-    $('.slot-1').text(data.obj_name);
-    $('.slot-2').text(data.your_name);
-    $('.love_words').text(data.words);
-    $('.section4 .options-list li').find('i').hide();
-    $('.obj-mask').hide();
-  });
-  //取消
-  $('.cancel').on('click', function () {
-    $('.obj-mask').hide();
-  });
-  // 点击切换选中按钮状态
-  sec3_opt.on('click', function () {
-    data.place = $(this).data('place');  //获取表白地点
-    sec3_opt.find('i').hide();
-    $(this).find('i').show();
-  });
-  // 首页点击进入下一页
-  $('.swiper-button-next1').on('click', function () {
-    mySwiper.slideNext();
-  });
-  // 获取对象昵称 点击进入下一页
-  $('.swiper-button-next2').on('click', function () {
-    data.obj_name = $('#obj_name').val();  // 获取对象昵称(选填)
-    data.your_name = $('#your_name').val(); // 获取你的昵称(选填)
-    if (data.obj_id !== '') {
-      mySwiper.slideNext();
-    }
-    else {
-      weui.alert('请选择表白对象');
-      return;
-    }
-  });
-  // 获取表白地点 点击进入下一页
-  $('.swiper-button-next3').on('click', function () {
-    if (data.place !== '') {
-      mySwiper.slideNext();
-    }
-    else {
-      weui.alert('请选择表白地点');
-      return;
-    }
-  });
-  // 点击切换选中按钮状态
-  $('.section4 .options-list').on('click', 'li', function (e) {
-    $('.section4 .options-list li').find('i').hide();
-    if ($('.love_words').text() == '' || $('.love_words').text() == '25个字以内') {
-      data.words = e.currentTarget.innerText;
-      $(this).find('i').show();
-    } else {
-      weui.alert('您已输入表白语请清空后再试')
-      data.words = $('.love_words').text()
-    }
-  });
-  // 获取表白内容 点击进入下一页
-  $('.swiper-button-next4').on('click', function () {
-    if (data.words !== '') {
-      mySwiper.slideNext();
-      // 内容生成中
+    talk: '',       // 想说的话
+    init: function () {
       $.ajax({
-        url: 'http://stat.iliangcang.com/520/prog/getsharepic.php',
-        data: {
-          place: data.place,
-          words: data.words,
-          obj_name: data.obj_name, // 对象昵称(选填)
-          your_name: data.your_name// 你的昵称(选填)
-        },
+        url: 'http://www.iliangcang.com/520/prog/getshareparam.php?url='+encodeURIComponent(location.href.split('#').toString()),
         //生成成功
         success: function (data) {
           let res = JSON.parse(data);
-          let img_url = res.pic_url;
-          $('.section6 .result').attr('src', img_url);
-          $('.section5').delay(2000).fadeOut().end().find($('.sec6-wrap')).show();
+          wx.config({
+            debug: false,
+            appId: res.appId,
+            timestamp: res.timestamp,
+            nonceStr: res.nonceStr,
+            signature: res.signature,
+            jsApiList: [
+              'checkJsApi',
+              'onMenuShareTimeline',
+              'onMenuShareAppMessage'
+            ]
+          });
+          wx.ready(function () {
+            // 2.2 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
+            wx.onMenuShareTimeline({
+              title: '520，你该表白了', // 分享标题
+              // desc: '520，你准备好给谁表白了吗？', // 加该字段会报错
+              link: 'http://www.iliangcang.com/520/index.html',
+              imgUrl: 'http://imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30250.jpeg',
+              trigger: function (res) {
+                // alert("分享到朋友圈按钮点击");
+              },
+              success: function (res) {
+
+              },
+              cancel: function (res) {
+
+              },
+              fail: function (res) {
+                alert(JSON.stringify(res));
+              }
+            });
+            wx.onMenuShareAppMessage({
+              title: '520，你该表白了', // 分享标题
+              desc: '520，你准备好给谁表白了吗？', // 分享描述
+              link: 'http://www.iliangcang.com/520/index.html', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: 'http://imgs-qn.iliangcang.com/ware/sowhatimg/ware/orig/2/30/30250.jpeg', // 分享图标
+              type: '', // 分享类型,music、video或link，不填默认为link
+              dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+              success: function () {
+                alert('ok')
+                // 用户确认分享后执行的回调函数
+              },
+              cancel: function () {
+                alert('已取消');
+                // 用户取消分享后执行的回调函数
+              }
+            });
+          });
         }
-      });
-    }
-    else {
-      weui.alert('请选择表白语或输入要表白的话');
-      return;
-    }
-  });
+      });  // 获取app_id 调用sdk
+      func.switch_next()
+      func.change_status()
+      func.change_mask()
+    }()   // 初始化自动执行请求app_id
+  };
 });
