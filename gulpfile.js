@@ -4,7 +4,7 @@
 
 let NODE_ENV = process.argv[2];
 
-console.log(`>>当前构建的环境为：${NODE_ENV}模式！===========================`);
+console.log(`>>当前构建的环境为：${NODE_ENV}模式！===================`);
 
 let gulp = require('gulp'),
     $ = require('gulp-load-plugins')(), // 自动加载以gulp-为前缀的插件
