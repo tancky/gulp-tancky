@@ -4,55 +4,51 @@
 
 $(function () {
   // 解决移动端300ms点击延迟
-  FastClick.attach(document.body);
+  FastClick.attach(document.body)
   // 初始化swiper
   let mySwiper = new Swiper('.swiper-container', {
-    direction: 'vertical',  //竖向滚动
-    allowTouchMove: false,  //禁止触摸滑动
+    direction: 'vertical', // 竖向滚动
+    allowTouchMove: false, // 禁止触摸滑动
     on: {
       init: function () {
-        swiperAnimateCache(this); //隐藏动画元素
-        swiperAnimate(this); //初始化完成开始动画
+        swiperAnimateCache(this) // 隐藏动画元素
+        swiperAnimate(this) // 初始化完成开始动画
       },
       slideChangeTransitionStart: function () {
-        swiperAnimateCache(this); //隐藏动画元素
-        swiperAnimate(this); //初始化完成开始动画
+        swiperAnimateCache(this) // 隐藏动画元素
+        swiperAnimate(this) // 初始化完成开始动画
       }
     }
-  });
+  })
   // 函数命名空间
   let func = {
-    switch_next() {
+    switch_next () {
       // 首页点击进入下一页
       $('.swiper-button-next1').on('click', function () {
-        mySwiper.slideNext();
-      });
+        mySwiper.slideNext()
+      })
       // 获取对象昵称 点击进入下一页
       $('.swiper-button-next2').on('click', function () {
-        data.obj_name = $('#obj_name').val();  // 获取对象昵称(选填)
-        data.your_name = $('#your_name').val(); // 获取你的昵称(选填)
+        data.obj_name = $('#obj_name').val() // 获取对象昵称(选填)
+        data.your_name = $('#your_name').val() // 获取你的昵称(选填)
         if (data.obj_id !== '') {
-          mySwiper.slideNext();
+          mySwiper.slideNext()
+        } else {
+          weui.alert('请选择表白对象')
         }
-        else {
-          weui.alert('请选择表白对象');
-          return;
-        }
-      });
+      })
       // 获取表白地点 点击进入下一页
       $('.swiper-button-next3').on('click', function () {
         if (data.place !== '') {
-          mySwiper.slideNext();
+          mySwiper.slideNext()
+        } else {
+          weui.alert('请选择表白地点')
         }
-        else {
-          weui.alert('请选择表白地点');
-          return;
-        }
-      });
+      })
       // 获取表白内容 点击进入下一页
       $('.swiper-button-next4').on('click', function () {
         if (data.words !== '') {
-          mySwiper.slideNext();
+          mySwiper.slideNext()
           // 内容生成中
           $.ajax({
             url: 'http://www.iliangcang.com/520/prog/getsharepic.php',
@@ -62,85 +58,83 @@ $(function () {
               obj_name: data.obj_name, // 对象昵称(选填)
               your_name: data.your_name// 你的昵称(选填)
             },
-            //生成成功
+            // 生成成功
             success: function (data) {
-              let res = JSON.parse(data);
-              let img_url = res.pic_url;
-              $('.section6 .result').attr('src', img_url);
-              $('.section5').delay(2000).fadeOut().end().find($('.sec6-wrap')).show();
+              let res = JSON.parse(data)
+              let img_url = res.pic_url
+              $('.section6 .result').attr('src', img_url)
+              $('.section5').delay(2000).fadeOut().end().find($('.sec6-wrap')).show()
             }
-          });
+          })
+        } else {
+          weui.alert('请选择表白语或输入要表白的话')
         }
-        else {
-          weui.alert('请选择表白语或输入要表白的话');
-          return;
-        }
-      });
+      })
     },
-    change_status() {
+    change_status () {
       // 点击切换选中按钮状态
       $('.section2 .options-list li').on('click', function () {
-        data.obj_id = $(this).data('obj_id'); // 获取表白id
-        data.list = data.arr[data.obj_id].list;  // 获取当前点击对象的表白语数组
-        $('.section2 .options-list li').find('i').hide();
-        $(this).find('i').show();
-        //根据表白人物渲染不同的表白语
-        let tpl = Handlebars.compile($('#list-tpl').html());  //解析模板
-        $('.section4 .options-list').html(tpl(data.list));
-      });
+        data.obj_id = $(this).data('obj_id') // 获取表白id
+        data.list = data.arr[data.obj_id].list // 获取当前点击对象的表白语数组
+        $('.section2 .options-list li').find('i').hide()
+        $(this).find('i').show()
+        // 根据表白人物渲染不同的表白语
+        let tpl = Handlebars.compile($('#list-tpl').html()) // 解析模板
+        $('.section4 .options-list').html(tpl(data.list))
+      })
       // 点击切换选中按钮状态
       $('.section3 .options-list li').on('click', function () {
-        data.place = $(this).data('place');  //获取表白地点
-        $('.section3 .options-list li').find('i').hide();
-        $(this).find('i').show();
-      });
+        data.place = $(this).data('place') // 获取表白地点
+        $('.section3 .options-list li').find('i').hide()
+        $(this).find('i').show()
+      })
       // 点击切换选中按钮状态
       $('.section4 .options-list').on('click', 'li', function (e) {
-        $('.section4 .options-list li').find('i').hide();
+        $('.section4 .options-list li').find('i').hide()
         if ($('.love_words').text() == '' || $('.love_words').text() == '25个字以内') {
-          data.words = e.currentTarget.innerText;
-          $(this).find('i').show();
+          data.words = e.currentTarget.innerText
+          $(this).find('i').show()
         } else {
           weui.alert('您已输入表白语请清空后再试')
           data.words = $('.love_words').text()
         }
-      });
+      })
     },
-    change_mask() {
-      //点击显示表白对象遮罩层
+    change_mask () {
+      // 点击显示表白对象遮罩层
       $('.zdy li').on('click', function () {
-        console.log($(this).data('obj_id'));
-        $('.mask1').fadeIn();
-      });
-      //点击显示表白语遮罩层
+        console.log($(this).data('obj_id'))
+        $('.mask1').fadeIn()
+      })
+      // 点击显示表白语遮罩层
       $('.custom').on('click', function () {
-        console.log($(this).data('obj_id'));
-        $('.mask2').fadeIn();
-      });
-      //点击确认按钮获取输入框的值
+        console.log($(this).data('obj_id'))
+        $('.mask2').fadeIn()
+      })
+      // 点击确认按钮获取输入框的值
       $('.confirm').on('click', function () {
-        data.obj_name = $('#obj_name').val();
-        data.your_name = $('#your_name').val();
-        data.words = $('#words').val();
-        $('.slot-1').text(data.obj_name);
-        $('.slot-2').text(data.your_name);
-        $('.love_words').text(data.words);
-        $('.section4 .options-list li').find('i').hide();
-        $('.obj-mask').hide();
-      });
-      //取消
+        data.obj_name = $('#obj_name').val()
+        data.your_name = $('#your_name').val()
+        data.words = $('#words').val()
+        $('.slot-1').text(data.obj_name)
+        $('.slot-2').text(data.your_name)
+        $('.love_words').text(data.words)
+        $('.section4 .options-list li').find('i').hide()
+        $('.obj-mask').hide()
+      })
+      // 取消
       $('.cancel').on('click', function () {
-        $('.obj-mask').hide();
-      });
+        $('.obj-mask').hide()
+      })
     }
-  };
+  }
   // 初始化变量数据
   let data = {
-    obj_id: '', //选择对象id
+    obj_id: '', // 选择对象id
     obj_name: '', // 对象昵称(选填)
-    your_name: '',// 你的昵称(选填)
-    place: '',     //表白地点
-    words: '',      //表白语
+    your_name: '', // 你的昵称(选填)
+    place: '', // 表白地点
+    words: '', // 表白语
     arr: [
       {
         obj_id: 0,
@@ -316,15 +310,15 @@ $(function () {
           }
         ]
       }
-    ],    //表白语数组
-    list: [],      // 选中的表白语数组
-    talk: '',       // 想说的话
-    init: function () {
+    ], // 表白语数组
+    list: [], // 选中的表白语数组
+    talk: '', // 想说的话
+    init: (function () {
       $.ajax({
-        url: 'http://www.iliangcang.com/520/prog/getshareparam.php?url='+encodeURIComponent(location.href.split('#').toString()),
-        //生成成功
+        url: 'http://www.iliangcang.com/520/prog/getshareparam.php?url=' + encodeURIComponent(location.href.split('#').toString()),
+        // 生成成功
         success: function (data) {
-          let res = JSON.parse(data);
+          let res = JSON.parse(data)
           wx.config({
             debug: false,
             appId: res.appId,
@@ -336,7 +330,7 @@ $(function () {
               'onMenuShareTimeline',
               'onMenuShareAppMessage'
             ]
-          });
+          })
           wx.ready(function () {
             // 2.2 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
             wx.onMenuShareTimeline({
@@ -354,9 +348,9 @@ $(function () {
 
               },
               fail: function (res) {
-                alert(JSON.stringify(res));
+                alert(JSON.stringify(res))
               }
-            });
+            })
             wx.onMenuShareAppMessage({
               title: '520，你该表白了', // 分享标题
               desc: '520，你准备好给谁表白了吗？', // 分享描述
@@ -369,16 +363,16 @@ $(function () {
                 // 用户确认分享后执行的回调函数
               },
               cancel: function () {
-                alert('已取消');
+                alert('已取消')
                 // 用户取消分享后执行的回调函数
               }
-            });
-          });
+            })
+          })
         }
-      });  // 获取app_id 调用sdk
+      }) // 获取app_id 调用sdk
       func.switch_next()
       func.change_status()
       func.change_mask()
-    }()   // 初始化自动执行请求app_id
-  };
-});
+    }()) // 初始化自动执行请求app_id
+  }
+})
